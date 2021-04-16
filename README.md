@@ -1,12 +1,31 @@
 # Avalanche dev env kickstarter
 
+# Kurtosis
+
+A kurtosis based setup that will run avalanchego tests in the kurtosis framework.
+
+To use it:
+
+```
+cd kurtosis
+./scripts/build-and-run.sh all
+```
+
+It will:
+* Create and boot up an image of the avalanche-testing suite
+* Run the avalanche tests against `avalanchego:latest`
+
+
 ## Docker compose
 
 A simple docker compose that will bootstrap a local avalanche network.
 
 To use it:
 
-`docker-compose up`
+```
+cd docker-compose
+docker-compose up
+```
 
 It will:
 * Create 5 instances of `avalanchego:latest` and hook them together to bootstrap a local network
@@ -30,17 +49,3 @@ localhost:9664 -> node4:9651
 localhost:9665 -> node5:9651
 ```
 
-# Kurtosis
-
-A simple docker compose that will bootstrap a local avalanche network.
-
-To use it:
-
-```
-cd kurtosis
-./scripts/build-and-run.sh all
-```
-
-It will:
-* Create and boot up an image of the avalanche-testing suite
-* Run the avalanche tests against `avalanchego:latest`
