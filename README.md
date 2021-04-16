@@ -24,12 +24,14 @@ To use it:
 
 ```
 cd docker-compose
-docker-compose up
+docker-compose pull && docker-compose up
 ```
 
 It will:
 * Create 5 instances of `avalanchego:latest` and hook them together to bootstrap a local network
+* Ensure you have the `avalanchego:latest` by doing a `docker-compose pull`
 * Expose the API ports of the nodes on:
+
 
 ```
 localhost:9650 -> node1:9650
@@ -49,3 +51,4 @@ localhost:9664 -> node4:9651
 localhost:9665 -> node5:9651
 ```
 
+Please note 
