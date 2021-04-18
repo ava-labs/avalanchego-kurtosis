@@ -1,4 +1,7 @@
-#!/bin/bash
+# (c) 2021, Ava Labs, Inc. All rights reserved.
+# See the file LICENSE for licensing terms.
+
+!/bin/bash
 # TODO wait for node to be up instead of using sleep
 set -e
 

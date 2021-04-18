@@ -1,3 +1,6 @@
+// (c) 2021, Ava Labs, Inc. All rights reserved.
+// See the file LICENSE for licensing terms.
+
 package constants
 
 // DefaultLocalNetGenesisConfig contains the private keys and node IDs that come from avalanchego for the 5 bootstrapper nodes.

@@ -1,4 +1,7 @@
-#!/bin/bash
+# (c) 2021, Ava Labs, Inc. All rights reserved.
+# See the file LICENSE for licensing terms.
+
+!/bin/bash
 
 # Ensures the local run is using the correct version of libraries
 __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

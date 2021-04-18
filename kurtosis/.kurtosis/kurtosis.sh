@@ -1,4 +1,7 @@
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# (c) 2021, Ava Labs, Inc. All rights reserved.
+# See the file LICENSE for licensing terms.
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #
 #      Do not modify this file! It will get overwritten when you upgrade Kurtosis!
 #

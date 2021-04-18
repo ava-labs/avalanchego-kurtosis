@@ -1,4 +1,7 @@
-#!/bin/sh
+# (c) 2021, Ava Labs, Inc. All rights reserved.
+# See the file LICENSE for licensing terms.
+
+!/bin/sh
 set -ex
 
 openssl genrsa -out `dirname "$0"`/staker.key 4096
