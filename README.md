@@ -1,10 +1,13 @@
-# Avalanche dev env kickstarter
+# AvalancheGo Kurtosis Example
+
+This repository includes examples for spinning up a local Avalanche network
+using both [Kurtosis](https://www.kurtosistech.com/) and Docker Compose. Both
+examples utlize [AvalancheGo](https://github.com/ava-labs/avalanchego), the
+official node implementation for the Avalanche network.
 
 # Kurtosis
 
-A kurtosis based setup that will run avalanchego tests in the kurtosis framework.
-
-To use it:
+_Configuration that will run AvalancheGo tests using the Kurtosis framework_
 
 ```
 cd kurtosis
@@ -13,14 +16,13 @@ cd kurtosis
 
 It will:
 * Create and boot up an image of the avalanche-testing suite
-* Run the avalanche tests against `avalanchego:latest`
+* Run tests against `avalanchego:latest`
 
 
-## Docker compose
+## Docker Compose
 
-A simple docker compose that will bootstrap a local avalanche network.
-
-To use it:
+_Configuration that will bootstrap a local Avalanche network using Docker
+Compose_
 
 ```
 cd docker-compose
@@ -31,7 +33,6 @@ It will:
 * Create 5 instances of `avalanchego:latest` and hook them together to bootstrap a local network
 * Ensure you have the `avalanchego:latest` by doing a `docker-compose pull`
 * Expose the API ports of the nodes on:
-
 
 ```
 localhost:9650 -> node1:9650
@@ -50,5 +51,3 @@ localhost:9663 -> node3:9651
 localhost:9664 -> node4:9651
 localhost:9665 -> node5:9651
 ```
-
-Please note 
