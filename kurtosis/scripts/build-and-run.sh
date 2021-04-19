@@ -1,7 +1,7 @@
+#!/bin/sh
 # (c) 2021, Ava Labs, Inc. All rights reserved.
 # See the file LICENSE for licensing terms.
 
-#!/bin/bash
 set -eo pipefail
 script_dirpath="$(cd "$(dirname "${0}")" && pwd)"
 root_dirpath="$(dirname "${script_dirpath}")"
