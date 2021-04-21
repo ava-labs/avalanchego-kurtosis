@@ -1,4 +1,4 @@
-module github.com/otherview/avalanchego-kurtosis/kurtosis
+module github.com/ava-labs/avalanchego-kurtosis/kurtosis
 
 go 1.15
 
