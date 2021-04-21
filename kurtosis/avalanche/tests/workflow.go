@@ -6,19 +6,19 @@ package tests
 import (
 	"time"
 
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/chainhelper"
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/networkbuilder"
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/scenarios"
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/constants"
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/tests/testconstants"
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/tests/testhelpers"
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/kurtosis/testsuiteavalanche/runner"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/chainhelper"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/networkbuilder"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/scenarios"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/constants"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/tests/testconstants"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/tests/testhelpers"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/kurtosis/testsuiteavalanche/runner"
 	"github.com/kurtosis-tech/kurtosis-libs/golang/lib/networks"
 	"github.com/kurtosis-tech/kurtosis-libs/golang/lib/testsuite"
 	"github.com/palantir/stacktrace"
 	"github.com/sirupsen/logrus"
 
-	top "github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/topology"
+	top "github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/topology"
 )
 
 func Workflow(avalancheImage string) *runner.AvalancheTestRunner {

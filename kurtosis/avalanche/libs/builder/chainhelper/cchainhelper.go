@@ -6,7 +6,7 @@ package chainhelper
 import (
 	"time"
 
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/avalanchegoclient"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/avalanchegoclient"
 	"github.com/ava-labs/avalanchego/ids"
 )
 
