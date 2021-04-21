@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"strings"
 
-	top "github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/topology"
+	top "github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/topology"
 )
 
 func VerifyConnectedPeers(n1 []*top.Node, n2 []*top.Node) error {

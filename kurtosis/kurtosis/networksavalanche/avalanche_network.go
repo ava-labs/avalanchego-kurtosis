@@ -9,9 +9,9 @@ import (
 
 	"github.com/kurtosis-tech/kurtosis-libs/golang/lib/testsuite"
 
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/avalanchegoclient"
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/networkbuilder"
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/kurtosis/servicesavalanche/avalanchegonode"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/avalanchegoclient"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/networkbuilder"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/kurtosis/servicesavalanche/avalanchegonode"
 	"github.com/kurtosis-tech/kurtosis-libs/golang/lib/networks"
 	"github.com/kurtosis-tech/kurtosis-libs/golang/lib/services"
 	"github.com/palantir/stacktrace"

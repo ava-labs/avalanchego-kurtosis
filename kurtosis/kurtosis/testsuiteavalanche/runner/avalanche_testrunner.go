@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/networkbuilder"
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/kurtosis/networksavalanche"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/networkbuilder"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/kurtosis/networksavalanche"
 	"github.com/kurtosis-tech/kurtosis-libs/golang/lib/networks"
 	"github.com/kurtosis-tech/kurtosis-libs/golang/lib/services"
 	"github.com/kurtosis-tech/kurtosis-libs/golang/lib/testsuite"

@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/kurtosis-tech/kurtosis-libs/golang/lib/testsuite"
-	testsuiteAvalanche "github.com/otherview/avalanchego-kurtosis/kurtosis/kurtosis/testsuiteavalanche"
+	testsuiteAvalanche "github.com/ava-labs/avalanchego-kurtosis/kurtosis/kurtosis/testsuiteavalanche"
 	"github.com/palantir/stacktrace"
 	"github.com/sirupsen/logrus"
 )

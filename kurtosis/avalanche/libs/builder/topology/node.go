@@ -6,9 +6,9 @@ package topology
 import (
 	"time"
 
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/avalanchegoclient"
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/chainhelper"
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/constants"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/avalanchegoclient"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/chainhelper"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/constants"
 	"github.com/ava-labs/avalanchego/api"
 	"github.com/ava-labs/avalanchego/ids"
 	"github.com/kurtosis-tech/kurtosis-libs/golang/lib/testsuite"

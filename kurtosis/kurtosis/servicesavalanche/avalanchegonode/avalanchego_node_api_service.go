@@ -6,7 +6,7 @@ package avalanchegonode
 import (
 	"time"
 
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/avalanchegoclient"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/avalanchegoclient"
 	"github.com/kurtosis-tech/kurtosis-libs/golang/lib/services"
 	"github.com/sirupsen/logrus"
 )
