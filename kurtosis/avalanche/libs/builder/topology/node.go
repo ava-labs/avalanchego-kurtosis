@@ -73,6 +73,11 @@ func (n *Node) GetClient() *avalanchegoclient.Client {
 	return n.client
 }
 
+// Returns the node's UserPass
+func (n Node) GetUserPass() api.UserPass {
+	return n.UserPass
+}
+
 // BecomeValidator is a multi step methods that does the following
 // - exports AVAX from the XChain + waits for acceptance in the XChain
 // - imports the amount to the PChain + waits for acceptance in the PChain
