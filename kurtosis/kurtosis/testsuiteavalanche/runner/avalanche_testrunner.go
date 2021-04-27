@@ -19,12 +19,12 @@ import (
 type AvalancheTestRunner struct {
 	nodeImage      string
 	definedNetwork *networkbuilder.Network
-	runnableTest   func(network networks.Network, context testsuite.TestContext)
+	runnableTest   func(network networks.Network) error
 	testTimeout    time.Duration
 	setupTimeout   time.Duration
 }
 
-func NewGenericAvalancheTestRunner(definedNetwork *networkbuilder.Network, test func(network networks.Network, context testsuite.TestContext), testTimeout time.Duration, setupTimeout time.Duration) *AvalancheTestRunner {
+func NewGenericAvalancheTestRunner(definedNetwork *networkbuilder.Network, test func(network networks.Network) error, testTimeout time.Duration, setupTimeout time.Duration) *AvalancheTestRunner {
 	return &AvalancheTestRunner{
 		definedNetwork: definedNetwork,
 		runnableTest:   test,
@@ -32,6 +32,14 @@ func NewGenericAvalancheTestRunner(definedNetwork *networkbuilder.Network, test 
 		setupTimeout:   setupTimeout,
 	}
 }
+
+func (runner *AvalancheTestRunner) Configure(builder *testsuite.TestConfigurationBuilder) {
+	setupTimeoutSecondsUint32 := uint32(runner.setupTimeout.Seconds())
+	runTimeoutSecondsUint32 := uint32(runner.testTimeout.Seconds())
+	builder.WithSetupTimeoutSeconds(setupTimeoutSecondsUint32).
+		WithRunTimeoutSeconds(runTimeoutSecondsUint32)
+}
+
 
 func (runner *AvalancheTestRunner) Setup(networkCtx *networks.NetworkContext) (networks.Network, error) {
 	newNetwork := networksavalanche.NewAvalancheNetwork(networkCtx, runner.nodeImage)
@@ -69,23 +77,11 @@ func (runner *AvalancheTestRunner) Setup(networkCtx *networks.NetworkContext) (n
 	return newNetwork, nil
 }
 
-func (runner *AvalancheTestRunner) Run(network networks.Network, testCtx testsuite.TestContext) {
+func (runner *AvalancheTestRunner) Run(network networks.Network) error {
 	startTime := time.Now()
-	runner.runnableTest(
-		network,
-		testCtx,
-	)
+	if err := runner.runnableTest(network); err != nil {
+		return stacktrace.Propagate(err, "An error occurred running the test")
+	}
 	logrus.Infof("- - - - - - - - - - - - - - - - - - - - - Test finished in %f seconds", time.Since(startTime).Seconds())
-}
-
-func (runner *AvalancheTestRunner) GetTestConfiguration() testsuite.TestConfiguration {
-	return testsuite.TestConfiguration{}
-}
-
-func (runner *AvalancheTestRunner) GetExecutionTimeout() time.Duration {
-	return runner.testTimeout
-}
-
-func (runner *AvalancheTestRunner) GetSetupTimeout() time.Duration {
-	return runner.setupTimeout
+	return nil
 }

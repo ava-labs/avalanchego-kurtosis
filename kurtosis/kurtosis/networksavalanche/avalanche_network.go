@@ -7,8 +7,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/kurtosis-tech/kurtosis-libs/golang/lib/testsuite"
-
 	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/avalanchegoclient"
 	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/networkbuilder"
 	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/kurtosis/servicesavalanche/avalanchegonode"
@@ -37,10 +35,10 @@ func NewAvalancheNetwork(networkCtx *networks.NetworkContext, apiServiceImage st
 	}
 }
 
-func Cast(network networks.Network, context *testsuite.TestContext) *AvalancheNetwork {
+func Cast(network networks.Network) *AvalancheNetwork {
 	avalancheNetwork, ok := network.(*AvalancheNetwork)
 	if !ok {
-		context.Fatal(stacktrace.NewError("network not AvalancheNetwork type"))
+		panic(stacktrace.NewError("network not AvalancheNetwork type"))
 	}
 	return avalancheNetwork
 }
@@ -51,8 +49,8 @@ func (network *AvalancheNetwork) CreateNodeNoCheck(definedNetwork *networkbuilde
 		return serviceID, nil, fmt.Errorf("node with the same nodeID already exists")
 	}
 
-	initializer := avalanchegonode.NewNodeInitializer(definedNetwork, node, network.nodes)
-	uncastedService, checker, err := network.networkCtx.AddService(serviceID, initializer)
+	configFactory := avalanchegonode.NewAvalancheGoContainerConfigFactory(definedNetwork, node, network.nodes)
+	uncastedService, _, checker, err := network.networkCtx.AddService(serviceID, configFactory)
 	if err != nil {
 		return "", nil, stacktrace.Propagate(err, "An error occurred adding the API service")
 	}
@@ -68,8 +66,8 @@ func (network *AvalancheNetwork) CreateNode(definedNetwork *networkbuilder.Netwo
 		return serviceID, fmt.Errorf("node with the same nodeID already exists")
 	}
 
-	initializer := avalanchegonode.NewNodeInitializer(definedNetwork, node, network.nodes)
-	uncastedService, checker, err := network.networkCtx.AddService(serviceID, initializer)
+	initializer := avalanchegonode.NewAvalancheGoContainerConfigFactory(definedNetwork, node, network.nodes)
+	uncastedService, _, checker, err := network.networkCtx.AddService(serviceID, initializer)
 	if err != nil {
 		return "", stacktrace.Propagate(err, "An error occurred adding the API service")
 	}
