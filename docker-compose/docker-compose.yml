@@ -5,10 +5,10 @@ services:
   node-1:
     container_name: node-1
     image: avaplatform/avalanchego:latest
-    command: ["/files/start-node1.sh"]
+    command: [/files/start-node1.sh]
     ports:
-        - '9650:9650'
-        - '9660:9651'
+        - '9661:9650'
+        - '9671:9651'
     networks:
         - avalanche
     volumes:
@@ -18,8 +18,8 @@ services:
     image: avaplatform/avalanchego:latest
     command: ["/files/start-node2.sh"]
     ports:
-        - '9652:9650'
-        - '9662:9651'
+        - '9662:9650'
+        - '9672:9651'
     networks:
         - avalanche
     volumes:
@@ -29,8 +29,8 @@ services:
     image: avaplatform/avalanchego:latest
     command: ["/files/start-node3.sh"]
     ports:
-        - "9653:9650"
-        - '9663:9651'
+        - "9663:9650"
+        - '9673:9651'
     networks:
         - avalanche
     volumes:
@@ -40,8 +40,8 @@ services:
     image: avaplatform/avalanchego:latest
     command: ["/files/start-node4.sh"]
     ports:
-        - "9654:9650"
-        - '9664:9651'
+        - "9664:9650"
+        - '9674:9651'
     networks:
         - avalanche
     volumes:
@@ -51,8 +51,8 @@ services:
     image: avaplatform/avalanchego:latest
     command: ["/files/start-node5.sh"]
     ports:
-        - "9655:9650"
-        - '9665:9651'
+        - "9665:9650"
+        - '9675:9651'
     networks:
         - avalanche    
     volumes:
