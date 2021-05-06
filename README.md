@@ -27,6 +27,8 @@ Compose_
 ```
 cd docker-compose
 docker-compose pull && docker-compose up
+# start a node with
+./build/avalanchego --network-id=local --bootstrap-ips=127.0.0.1:9671 --bootstrap-ids=NodeID-7Xhw2mDxuDS44j42TCB6U5579esbSt3Lg
 ```
 
 It will:
@@ -35,19 +37,19 @@ It will:
 * Expose the API ports of the nodes on:
 
 ```
-localhost:9650 -> node1:9650
-localhost:9652 -> node2:9650
-localhost:9653 -> node3:9650
-localhost:9654 -> node4:9650
-localhost:9655 -> node5:9650
+localhost:9661 -> node1:9650
+localhost:9662 -> node2:9650
+localhost:9663 -> node3:9650
+localhost:9664 -> node4:9650
+localhost:9665 -> node5:9650
 ```
 
 * Expose the Staking ports of the nodes on:
 
 ```
-localhost:9660 -> node1:9651
-localhost:9662 -> node2:9651
-localhost:9663 -> node3:9651
-localhost:9664 -> node4:9651
-localhost:9665 -> node5:9651
+localhost:9671 -> node1:9651
+localhost:9672 -> node2:9651
+localhost:9673 -> node3:9651
+localhost:9674 -> node4:9651
+localhost:9675 -> node5:9651
 ```
