@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/constants"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/constants"
 	"github.com/ava-labs/avalanchego/api/admin"
 	"github.com/ava-labs/avalanchego/api/health"
 	"github.com/ava-labs/avalanchego/api/info"

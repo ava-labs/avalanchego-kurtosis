@@ -4,11 +4,10 @@
 package topology
 
 import (
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/networkbuilder"
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/constants"
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/kurtosis/networksavalanche"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/networkbuilder"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/constants"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/kurtosis/networksavalanche"
 	"github.com/kurtosis-tech/kurtosis-libs/golang/lib/networks"
-	"github.com/kurtosis-tech/kurtosis-libs/golang/lib/testsuite"
 	"github.com/palantir/stacktrace"
 	"github.com/sirupsen/logrus"
 )
@@ -16,17 +15,15 @@ import (
 // Topology defines how the nodes behave/capabilities in the network
 type Topology struct {
 	network *networksavalanche.AvalancheNetwork
-	context *testsuite.TestContext
 	genesis *Genesis
 	nodes   map[string]*Node
 }
 
 // New creates a new instance of the Topology
-func New(network networks.Network, context *testsuite.TestContext) *Topology {
-	avalancheNetwork := networksavalanche.Cast(network, context)
+func New(network networks.Network) *Topology {
+	avalancheNetwork := networksavalanche.Cast(network)
 	return &Topology{
 		network: avalancheNetwork,
-		context: context,
 		nodes:   map[string]*Node{},
 	}
 }
@@ -35,20 +32,20 @@ func New(network networks.Network, context *testsuite.TestContext) *Topology {
 func (s *Topology) AddNode(id string, username string, password string) *Topology {
 	client, err := s.network.GetNodeClient(id)
 	if err != nil {
-		s.context.Fatal(stacktrace.Propagate(err, "Unable to fetch the Avalanche client"))
+		panic(stacktrace.Propagate(err, "Unable to fetch the Avalanche client"))
 		return s
 	}
 
 	ipAddress, err := s.network.GetIPAddress(id)
 	if err != nil {
-		s.context.Fatal(stacktrace.Propagate(err, "Unable to fetch the Avalanche node IP address"))
+		panic(stacktrace.Propagate(err, "Unable to fetch the Avalanche node IP address"))
 		return s
 	}
 
-	newNode := newNode(id, username, password, ipAddress, client, s.context).CreateAddress()
+	newNode := newNode(id, username, password, ipAddress, client).CreateAddress()
 	nodeID, err := client.InfoAPI().GetNodeID()
 	if err != nil {
-		s.context.Fatal(stacktrace.Propagate(err, "Unable to fetch the InfoAPI Node ID"))
+		panic(stacktrace.Propagate(err, "Unable to fetch the InfoAPI Node ID"))
 		return s
 	}
 
@@ -61,14 +58,14 @@ func (s *Topology) AddNode(id string, username string, password string) *Topolog
 func (s *Topology) AddGenesis(nodeID string, username string, password string) *Topology {
 	client, err := s.network.GetNodeClient(nodeID)
 	if err != nil {
-		s.context.Fatal(stacktrace.Propagate(err, "Unable to fetch the genesis Avalanche client"))
+		panic(stacktrace.Propagate(err, "Unable to fetch the genesis Avalanche client"))
 		return s
 	}
 
-	s.genesis = newGenesis(nodeID, username, password, client, s.context)
+	s.genesis = newGenesis(nodeID, username, password, client)
 	err = s.genesis.ImportGenesisFunds()
 	if err != nil {
-		s.context.Fatal(stacktrace.Propagate(err, "Could not get delegator node ID."))
+		panic(stacktrace.Propagate(err, "Could not get delegator node ID."))
 	}
 
 	return s

@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/constants"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/constants"
 	"github.com/ava-labs/avalanchego/utils/units"
 )
 

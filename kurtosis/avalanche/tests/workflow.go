@@ -6,19 +6,18 @@ package tests
 import (
 	"time"
 
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/chainhelper"
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/networkbuilder"
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/scenarios"
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/constants"
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/tests/testconstants"
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/tests/testhelpers"
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/kurtosis/testsuiteavalanche/runner"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/chainhelper"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/networkbuilder"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/scenarios"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/constants"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/tests/testconstants"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/tests/testhelpers"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/kurtosis/testsuiteavalanche/runner"
 	"github.com/kurtosis-tech/kurtosis-libs/golang/lib/networks"
-	"github.com/kurtosis-tech/kurtosis-libs/golang/lib/testsuite"
 	"github.com/palantir/stacktrace"
 	"github.com/sirupsen/logrus"
 
-	top "github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/topology"
+	top "github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/topology"
 )
 
 func Workflow(avalancheImage string) *runner.AvalancheTestRunner {
@@ -51,10 +50,10 @@ func Workflow(avalancheImage string) *runner.AvalancheTestRunner {
 		AddNode(delegatorNode)
 
 	// the actual test
-	test := func(network networks.Network, context testsuite.TestContext) {
+	test := func(network networks.Network) error {
 
 		// builds the topology of the test
-		topology := top.New(network, &context)
+		topology := top.New(network)
 		topology.
 			AddNode(validatorNodeName, stakerUsername, stakerPassword).
 			AddNode(delegatorNodeName, delegatorUsername, delegatorPassword).
@@ -92,12 +91,12 @@ func Workflow(avalancheImage string) *runner.AvalancheTestRunner {
 			seedAmount-stakeAmount-txFee,
 		)
 		if err != nil {
-			context.Fatal(stacktrace.Propagate(err, "Failed to export AVAX to xChainAddress %s", stakerNode.XAddress))
+			panic(stacktrace.Propagate(err, "Failed to export AVAX to xChainAddress %s", stakerNode.XAddress))
 		}
 
 		err = chainhelper.PChain().AwaitTransactionAcceptance(stakerNode.GetClient(), exportTxID, 30*time.Second)
 		if err != nil {
-			context.Fatal(stacktrace.Propagate(err, "Failed to accept ExportTx: %s", exportTxID))
+			panic(stacktrace.Propagate(err, "Failed to accept ExportTx: %s", exportTxID))
 		}
 
 		importTxID, err := stakerNode.GetClient().XChainAPI().ImportAVAX(
@@ -105,17 +104,17 @@ func Workflow(avalancheImage string) *runner.AvalancheTestRunner {
 			stakerNode.XAddress,
 			constants.PlatformChainID.String())
 		if err != nil {
-			context.Fatal(stacktrace.Propagate(err, "Failed to import AVAX to xChainAddress %s", stakerNode.XAddress))
+			panic(stacktrace.Propagate(err, "Failed to import AVAX to xChainAddress %s", stakerNode.XAddress))
 		}
 
 		err = chainhelper.XChain().AwaitTransactionAcceptance(stakerNode.GetClient(), importTxID, 30*time.Second)
 		if err != nil {
-			context.Fatal(stacktrace.Propagate(err, "Failed to wait for acceptance of transaction on XChain."))
+			panic(stacktrace.Propagate(err, "Failed to wait for acceptance of transaction on XChain."))
 		}
 
 		err = chainhelper.PChain().CheckBalance(stakerNode.GetClient(), stakerNode.PAddress, 0)
 		if err != nil {
-			context.Fatal(stacktrace.Propagate(err, "Unexpected P Chain Balance after P -> X Transfer."))
+			panic(stacktrace.Propagate(err, "Unexpected P Chain Balance after P -> X Transfer."))
 		}
 
 		// Now we should have
@@ -123,7 +122,7 @@ func Workflow(avalancheImage string) *runner.AvalancheTestRunner {
 		err = chainhelper.XChain().CheckBalance(stakerNode.GetClient(), stakerNode.XAddress, "AVAX",
 			totalAmount-seedAmount-2*txFee+seedAmount-stakeAmount-2*txFee)
 		if err != nil {
-			context.Fatal(stacktrace.Propagate(err, "Unexpected X Chain Balance after P -> X Transfer."))
+			panic(stacktrace.Propagate(err, "Unexpected X Chain Balance after P -> X Transfer."))
 		}
 		logrus.Infof("Transferred leftover staker funds back to X Chain and verified X and P balances.")
 
@@ -137,12 +136,12 @@ func Workflow(avalancheImage string) *runner.AvalancheTestRunner {
 			seedAmount-stakeAmount-txFee,
 		)
 		if err != nil {
-			context.Fatal(stacktrace.Propagate(err, "Failed to export AVAX to xChainAddress %s", delegatorNode.XAddress))
+			panic(stacktrace.Propagate(err, "Failed to export AVAX to xChainAddress %s", delegatorNode.XAddress))
 		}
 
 		err = chainhelper.PChain().AwaitTransactionAcceptance(delegatorNode.GetClient(), exportTxID, 30*time.Second)
 		if err != nil {
-			context.Fatal(stacktrace.Propagate(err, "Failed to accept ExportTx: %s", exportTxID))
+			panic(stacktrace.Propagate(err, "Failed to accept ExportTx: %s", exportTxID))
 		}
 
 		txID, err := delegatorNode.GetClient().XChainAPI().ImportAVAX(
@@ -151,28 +150,30 @@ func Workflow(avalancheImage string) *runner.AvalancheTestRunner {
 			constants.PlatformChainID.String(),
 		)
 		if err != nil {
-			context.Fatal(stacktrace.Propagate(err, "Failed to export AVAX to xChainAddress %s", delegatorNode.XAddress))
+			panic(stacktrace.Propagate(err, "Failed to export AVAX to xChainAddress %s", delegatorNode.XAddress))
 		}
 
 		err = chainhelper.XChain().AwaitTransactionAcceptance(delegatorNode.GetClient(), txID, 30*time.Second)
 		if err != nil {
-			context.Fatal(stacktrace.Propagate(err, "Failed to Accept ImportTx: %s", importTxID))
+			panic(stacktrace.Propagate(err, "Failed to Accept ImportTx: %s", importTxID))
 		}
 
 		err = chainhelper.PChain().CheckBalance(delegatorNode.GetClient(), delegatorNode.PAddress, 0)
 		if err != nil {
-			context.Fatal(stacktrace.Propagate(err, "Unexpected P Chain Balance after P -> X Transfer."))
+			panic(stacktrace.Propagate(err, "Unexpected P Chain Balance after P -> X Transfer."))
 		}
 
 		err = chainhelper.XChain().CheckBalance(delegatorNode.GetClient(), delegatorNode.XAddress, "AVAX",
 			totalAmount-seedAmount-2*txFee+seedAmount-stakeAmount-2*txFee)
 		if err != nil {
-			context.Fatal(stacktrace.Propagate(err, "Unexpected X Chain Balance after P -> X Transfer."))
+			panic(stacktrace.Propagate(err, "Unexpected X Chain Balance after P -> X Transfer."))
 		}
 
 		logrus.Infof("Transferred leftover delegator funds back to X Chain and verified X and P balances.")
 
-		testhelpers.BootstrapAddedNodes(network, context, definedNetwork, avalancheImage, 2)
+		testhelpers.BootstrapAddedNodes(network, definedNetwork, avalancheImage, 2)
+
+		return nil
 	}
 
 	return runner.NewGenericAvalancheTestRunner(definedNetwork, test, testconstants.TestTimeout, testconstants.TestSetupTimeout)

@@ -6,8 +6,8 @@ package scenarios
 import (
 	"fmt"
 
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/networkbuilder"
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/constants"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/networkbuilder"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/constants"
 )
 
 // NewBootStrappingNodeNetwork creates a new scenario with five nodes network

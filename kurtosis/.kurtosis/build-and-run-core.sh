@@ -1,7 +1,4 @@
-# (c) 2021, Ava Labs, Inc. All rights reserved.
-# See the file LICENSE for licensing terms.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # This script is intended to be wrapped with a thin script passing in testsuite-specific
 #  variables (e.g. the name of the testsuite image)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -125,8 +122,10 @@ if "${do_build}"; then
         exit 1
     fi
 
-    echo "Building '${suite_image}:${docker_tag}' Docker image..."
-    if ! docker build -t "${suite_image}:${docker_tag}" -f "${dockerfile_filepath}" "${repo_dirpath}"; then
+    echo "Building '${suite_image}' Docker image..."
+    # The BUILD_TIMESTAMP variable is provided because Docker sometimes caches steps it shouldn't and we need a constantly-changing ARG so that we can intentionally bust the cache
+    # See: https://stackoverflow.com/questions/31782220/how-can-i-prevent-a-dockerfile-instruction-from-being-cached
+    if ! docker build --build-arg BUILD_TIMESTAMP="$(date +"%FT%H:%M:%S")" -t "${suite_image}:${docker_tag}" -f "${dockerfile_filepath}" "${repo_dirpath}"; then
         echo "Error: Docker build of the testsuite failed" >&2
         exit 1
     fi

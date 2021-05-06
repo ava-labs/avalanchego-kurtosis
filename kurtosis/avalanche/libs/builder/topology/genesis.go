@@ -7,14 +7,13 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/avalanchegoclient"
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/chainhelper"
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/constants"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/avalanchegoclient"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/builder/chainhelper"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/constants"
 	"github.com/ava-labs/avalanchego/api"
 	"github.com/ava-labs/avalanchego/ids"
 	"github.com/ava-labs/avalanchego/vms/avm"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/kurtosis-tech/kurtosis-libs/golang/lib/testsuite"
 	"github.com/palantir/stacktrace"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/sync/errgroup"
@@ -28,10 +27,9 @@ type Genesis struct {
 	client   *avalanchegoclient.Client
 	Address  string
 	userPass api.UserPass
-	context  *testsuite.TestContext
 }
 
-func newGenesis(id string, userName string, password string, client *avalanchegoclient.Client, context *testsuite.TestContext) *Genesis {
+func newGenesis(id string, userName string, password string, client *avalanchegoclient.Client) *Genesis {
 	return &Genesis{
 		id: id,
 		userPass: api.UserPass{
@@ -39,7 +37,6 @@ func newGenesis(id string, userName string, password string, client *avalanchego
 			Password: password,
 		},
 		client:  client,
-		context: context,
 	}
 }
 
@@ -75,21 +72,21 @@ func (g *Genesis) FundXChainAddresses(addresses []string, amount uint64) *Genesi
 			"",
 		)
 		if err != nil {
-			g.context.Fatal(stacktrace.Propagate(err, "Failed to fund addresses with genesis funds."))
+			panic(stacktrace.Propagate(err, "Failed to fund addresses with genesis funds."))
 			return g
 		}
 
 		// wait for the tx to go through
 		err = chainhelper.XChain().AwaitTransactionAcceptance(g.client, txID, constants.TimeoutDuration)
 		if err != nil {
-			g.context.Fatal(stacktrace.Propagate(err, "Timed out waiting for transaction to be accepted on the XChain"))
+			panic(stacktrace.Propagate(err, "Timed out waiting for transaction to be accepted on the XChain"))
 			return g
 		}
 
 		// verify the balance
 		err = chainhelper.XChain().CheckBalance(g.client, address, "AVAX", amount)
 		if err != nil {
-			g.context.Fatal(stacktrace.Propagate(err, "Failed to validate fund on the XChain"))
+			panic(stacktrace.Propagate(err, "Failed to validate fund on the XChain"))
 			return g
 		}
 
@@ -115,7 +112,7 @@ func (g *Genesis) MultipleFundXChainAddresses(addresses []string, amount uint64,
 		// send it
 		txID, err := g.client.XChainAPI().SendMultiple(g.userPass, nil, "", sendOutputs, "")
 		if err != nil {
-			g.context.Fatal(stacktrace.Propagate(err, "Failed to send transaction with %d outputs", len(sendOutputs)))
+			panic(stacktrace.Propagate(err, "Failed to send transaction with %d outputs", len(sendOutputs)))
 			return g
 		}
 
@@ -124,7 +121,7 @@ func (g *Genesis) MultipleFundXChainAddresses(addresses []string, amount uint64,
 		// wait for the transactions to be accepted
 		err = chainhelper.XChain().AwaitTransactionAcceptance(g.client, txID, constants.TimeoutDuration)
 		if err != nil {
-			g.context.Fatal(stacktrace.Propagate(err, "Failed to wait transaction accepted for address %s", addresses[i]))
+			panic(stacktrace.Propagate(err, "Failed to wait transaction accepted for address %s", addresses[i]))
 		}
 		logrus.Infof("Transaction: %v accepted for address %s with %d utxos", txID.String(), address, len(sendOutputs))
 
@@ -150,7 +147,7 @@ func (g *Genesis) MultipleFundXChainAddresses(addresses []string, amount uint64,
 	}
 	err := errG.Wait()
 	if err != nil {
-		g.context.Fatal(stacktrace.Propagate(err, "Failed to check funds in addresses"))
+		panic(stacktrace.Propagate(err, "Failed to check funds in addresses"))
 	}
 
 	logrus.Infof("Funded X Chain Addresses: %d with %d in %v seconds.", len(addresses), amount, time.Since(startTime).Seconds())
@@ -174,7 +171,7 @@ func (g *Genesis) MultipleFundXChainAddresses2(addresses []string, amount uint64
 	// send it
 	txID, err := g.client.XChainAPI().SendMultiple(g.userPass, nil, "", sendOutputs, "")
 	if err != nil {
-		g.context.Fatal(stacktrace.Propagate(err, "Failed to send transaction with %d outputs", len(sendOutputs)))
+		panic(stacktrace.Propagate(err, "Failed to send transaction with %d outputs", len(sendOutputs)))
 		return g
 	}
 
@@ -183,7 +180,7 @@ func (g *Genesis) MultipleFundXChainAddresses2(addresses []string, amount uint64
 	// wait for the transactions to be accepted
 	err = chainhelper.XChain().AwaitTransactionAcceptance(g.client, txID, constants.TimeoutDuration)
 	if err != nil {
-		g.context.Fatal(stacktrace.Propagate(err, "Failed to wait transaction accepted"))
+		panic(stacktrace.Propagate(err, "Failed to wait transaction accepted"))
 	}
 	logrus.Infof("Transaction: %v accepted for addresses %v with %d utxos", txID, addresses, len(sendOutputs))
 
@@ -206,7 +203,7 @@ func (g *Genesis) MultipleFundXChainAddresses2(addresses []string, amount uint64
 	}
 	err = errG.Wait()
 	if err != nil {
-		g.context.Fatal(stacktrace.Propagate(err, "Failed to check funds in addresses"))
+		panic(stacktrace.Propagate(err, "Failed to check funds in addresses"))
 	}
 
 	logrus.Infof("Funded X Chain Addresses: %d with %d in %v seconds.", len(addresses), amount, time.Since(startTime).Seconds())
@@ -219,29 +216,29 @@ func (g *Genesis) FundCChainAddresses(addrs []common.Address, amount uint64) {
 		g.userPass,
 		constants.DefaultLocalNetGenesisConfig.FundedAddresses.PrivateKey)
 	if err != nil {
-		g.context.Fatal(stacktrace.Propagate(err, "unable to fund cchain"))
+		panic(stacktrace.Propagate(err, "unable to fund cchain"))
 	}
 
 	for _, addr := range addrs {
 		cChainBech32 := fmt.Sprintf("C%s", g.Address[1:])
 		txID, err := g.client.XChainAPI().ExportAVAX(g.userPass, nil, "", amount, cChainBech32)
 		if err != nil {
-			g.context.Fatal(stacktrace.Propagate(err, "Failed to export AVAX to C-Chain"))
+			panic(stacktrace.Propagate(err, "Failed to export AVAX to C-Chain"))
 		}
 		err = chainhelper.XChain().AwaitTransactionAcceptance(g.client, txID, constants.TimeoutDuration)
 		if err != nil {
-			g.context.Fatal(stacktrace.Propagate(err, "Timed out waiting to export AVAX to C-Chain"))
+			panic(stacktrace.Propagate(err, "Timed out waiting to export AVAX to C-Chain"))
 
 		}
 
 		txID, err = g.client.CChainAPI().Import(g.userPass, addr.Hex(), "X")
 		if err != nil {
-			g.context.Fatal(stacktrace.Propagate(err, "Failed to import AVAX to C-Chain"))
+			panic(stacktrace.Propagate(err, "Failed to import AVAX to C-Chain"))
 		}
 
 		err = chainhelper.CChain().AwaitTransactionAcceptance(g.client, txID, constants.TimeoutDuration)
 		if err != nil {
-			g.context.Fatal(stacktrace.Propagate(err, "Timed out waiting to import AVAX to C-Chain"))
+			panic(stacktrace.Propagate(err, "Timed out waiting to import AVAX to C-Chain"))
 
 		}
 	}
@@ -250,7 +247,7 @@ func (g *Genesis) FundCChainAddresses(addrs []common.Address, amount uint64) {
 func (g *Genesis) MoveBalanceToCChain(addr common.Address, txFee uint64) {
 	balance, err := g.client.XChainAPI().GetBalance(g.Address, constants.AvaxAssetID.String(), true)
 	if err != nil {
-		g.context.Fatal(stacktrace.Propagate(err, "Unable to fetch balance from the genesis X chain address"))
+		panic(stacktrace.Propagate(err, "Unable to fetch balance from the genesis X chain address"))
 	}
 
 	sendableBalance := (uint64(balance.Balance) - txFee) / 2

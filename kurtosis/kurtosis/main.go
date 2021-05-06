@@ -15,7 +15,7 @@ import (
 	"github.com/kurtosis-tech/kurtosis-libs/golang/lib/execution"
 	"github.com/sirupsen/logrus"
 
-	executionAvalanche "github.com/otherview/avalanchego-kurtosis/kurtosis/kurtosis/executionavalanche"
+	executionAvalanche "github.com/ava-labs/avalanchego-kurtosis/kurtosis/kurtosis/executionavalanche"
 	ethLog "github.com/ethereum/go-ethereum/log"
 )
 

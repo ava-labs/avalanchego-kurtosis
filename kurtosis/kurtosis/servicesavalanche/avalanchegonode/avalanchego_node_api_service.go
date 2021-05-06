@@ -6,14 +6,13 @@ package avalanchegonode
 import (
 	"time"
 
-	"github.com/otherview/avalanchego-kurtosis/kurtosis/avalanche/libs/avalanchegoclient"
+	"github.com/ava-labs/avalanchego-kurtosis/kurtosis/avalanche/libs/avalanchegoclient"
 	"github.com/kurtosis-tech/kurtosis-libs/golang/lib/services"
 	"github.com/sirupsen/logrus"
 )
 
 type NodeAPIService struct {
-	serviceID          services.ServiceID
-	ipAddr             string
+	serviceCtx		   *services.ServiceContext
 	httpPort           int
 	stakingPort        int
 	bootstrappedPChain bool
@@ -21,26 +20,30 @@ type NodeAPIService struct {
 	bootstrappedXChain bool
 }
 
-func NewNodeAPIService(serviceID services.ServiceID, ipAddr string, httpPort int, stakePort int) *NodeAPIService {
-	return &NodeAPIService{serviceID: serviceID, ipAddr: ipAddr, httpPort: httpPort, stakingPort: stakePort}
+func NewNodeAPIService(serviceCtx *services.ServiceContext, httpPort int, stakePort int) *NodeAPIService {
+	return &NodeAPIService{
+		serviceCtx: serviceCtx,
+		httpPort: httpPort,
+		stakingPort: stakePort,
+	}
 }
 
 // ===========================================================================================
 //                              Service interface methods
 // ===========================================================================================
 func (service *NodeAPIService) GetServiceID() services.ServiceID {
-	return service.serviceID
+	return service.serviceCtx.GetServiceID()
 }
 
 func (service *NodeAPIService) GetIPAddress() string {
-	return service.ipAddr
+	return service.serviceCtx.GetIPAddress()
 }
 
 func (service *NodeAPIService) IsAvailable() bool {
-	checkClient := avalanchegoclient.NewClient(service.ipAddr, service.httpPort, 10*time.Second)
+	checkClient := avalanchegoclient.NewClient(service.serviceCtx.GetIPAddress(), service.httpPort, 10*time.Second)
 
 	logrus.Infof("Node: %s -> Bootstrapped P: %v Bootstrapped C: %v Bootstrapped X: %v\n",
-		service.serviceID,
+		service.serviceCtx.GetServiceID(),
 		service.bootstrappedPChain,
 		service.bootstrappedCChain,
 		service.bootstrappedXChain,
@@ -70,7 +73,7 @@ func (service *NodeAPIService) IsAvailable() bool {
 	// todo we should use the health api
 	bootstrapped := service.bootstrappedPChain && service.bootstrappedCChain && service.bootstrappedXChain
 	if bootstrapped {
-		logrus.Infof("Node: %s is bootstrapped", service.serviceID)
+		logrus.Infof("Node: %s is bootstrapped", service.serviceCtx.GetServiceID())
 	}
 
 	return bootstrapped
@@ -81,7 +84,7 @@ func (service *NodeAPIService) IsAvailable() bool {
 // ===========================================================================================
 
 func (service *NodeAPIService) GetNodeClient() *avalanchegoclient.Client {
-	return avalanchegoclient.NewClient(service.ipAddr, service.httpPort, 10*time.Second)
+	return avalanchegoclient.NewClient(service.serviceCtx.GetIPAddress(), service.httpPort, 10*time.Second)
 }
 
 func (service *NodeAPIService) GetStakingPort() int {
