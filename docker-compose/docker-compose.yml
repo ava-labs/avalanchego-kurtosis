@@ -23,7 +23,9 @@ services:
     networks:
         - avalanche
     volumes:
-        - ./files:/files     
+        - ./files:/files    
+    depends_on: 
+        - node-1
   node-3:
     container_name: node-3
     image: avaplatform/avalanchego:latest
@@ -35,6 +37,8 @@ services:
         - avalanche
     volumes:
         - ./files:/files 
+    depends_on: 
+        - node-2
   node-4:
     container_name: node-4
     image: avaplatform/avalanchego:latest
@@ -46,6 +50,8 @@ services:
         - avalanche
     volumes:
         - ./files:/files 
+    depends_on: 
+        - node-3  
   node-5:
     container_name: node-5
     image: avaplatform/avalanchego:latest
@@ -56,7 +62,9 @@ services:
     networks:
         - avalanche    
     volumes:
-        - ./files:/files       
+        - ./files:/files    
+    depends_on: 
+        - node-4   
              
 version: '3'
 volumes:
