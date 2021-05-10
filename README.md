@@ -28,7 +28,7 @@ Compose_
 cd docker-compose
 docker-compose pull && docker-compose up
 # start a node with
-./build/avalanchego --network-id=local --bootstrap-ips=127.0.0.1:9671 --bootstrap-ids=NodeID-7Xhw2mDxuDS44j42TCB6U5579esbSt3Lg
+./build/avalanchego --network-id=local --bootstrap-ips=127.0.0.1:9671,127.0.0.1:9672,127.0.0.1:9673,127.0.0.1:9674,127.0.0.1:9675 --bootstrap-ids=NodeID-7Xhw2mDxuDS44j42TCB6U5579esbSt3Lg,NodeID-MFrZFVCXPv5iCn6M9K6XduxGTYp891xXZ,NodeID-NFBbbJ4qCmNaCzeW7sxErhvWqvEQMnYcN,NodeID-GWPcbFJZFfZreETSoWjPimr846mXEKCtu,NodeID-P7oB2McjBGgW2NXXWVYjV8JEDFoW9xDE5
 ```
 
 It will:
