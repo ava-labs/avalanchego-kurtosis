@@ -5,9 +5,9 @@ go 1.15
 require (
 	github.com/ava-labs/avalanchego v1.3.0
 	github.com/ava-labs/coreth v0.4.0-rc.8
-	github.com/ethereum/go-ethereum v1.9.21
+	github.com/ethereum/go-ethereum v1.10.17
 	github.com/kurtosis-tech/kurtosis-libs/golang v0.0.0-20210421174623-51de7828dfbc
 	github.com/palantir/stacktrace v0.0.0-20161112013806-78658fd2d177
 	github.com/sirupsen/logrus v1.6.0
-	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
+	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 )
